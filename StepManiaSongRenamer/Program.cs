@@ -1,4 +1,5 @@
 ﻿using System;
+using StepManiaSongRenamerLibrary;
 
 namespace StepManiaSongRenamer
 {
@@ -6,7 +7,7 @@ namespace StepManiaSongRenamer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs");
         }
     }
 }
