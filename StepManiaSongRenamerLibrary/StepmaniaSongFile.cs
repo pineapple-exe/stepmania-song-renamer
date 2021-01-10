@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -17,7 +18,7 @@ namespace StepManiaSongRenamerLibrary
     class StepmaniaSongFile : TextFile
     {
         private static Level lvl = Level.Challenge;
-        private static Regex difficultyPattern = new Regex($"(?<=#NOTES:\\s+dance-single:\\s+:\\s+{lvl}:\\s+)\\d+(?=:)");
+        private static readonly Regex difficultyPattern = new Regex($"(?<=#NOTES:\\s+dance-single:\\s+.*\\s+{lvl}:\\s+)\\d+(?=:)");
 
         private int Difficulty
         { 
@@ -48,7 +49,7 @@ namespace StepManiaSongRenamerLibrary
                     string[] BPMsLineSplit = BPMsLine.Split(':', BPMsLine.Length - 7);
                     string[] BPMsShifts = BPMsLineSplit[1].Split(',');
                     string[] BPMsInitial = BPMsShifts[0].Split('=');
-                    return double.Parse(BPMsInitial[1], new CultureInfo("en-US"));
+                    return double.Parse(BPMsInitial[1].Remove(BPMsInitial.Length - 1), new CultureInfo("en-US"));
                 }
             }
         }
@@ -68,9 +69,33 @@ namespace StepManiaSongRenamerLibrary
 
         }
 
-        public void PrintSong()
+        public bool AddInformativeTitle()
         {
-            Console.WriteLine($"[{ Difficulty }] [{ BPM }] { Title }");
+            bool titleModified = false;
+
+            for (int i = 0; i < Content.Length; i++)
+            {
+                if (Content[i].StartsWith("#TITLE:"))
+                {
+                    Content[i] = Content[i].Replace(Content[i], $"#TITLE:[{ Difficulty }] [{ BPM }] { Title };");
+                    File.WriteAllLines(Path, Content);
+                    titleModified = true;
+                    break;
+                }
+            }
+            return titleModified;
+        }
+
+        public string TitleWasModified(bool yes)
+        {
+            if (yes)
+            {
+                return Title;
+            }
+            else
+            {
+                return "Failed to add informative title.";
+            }
         }
     }
 }

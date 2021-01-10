@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 
 namespace StepManiaSongRenamerLibrary
 {
@@ -15,8 +12,9 @@ namespace StepManiaSongRenamerLibrary
             foreach (string file in smFiles)
             {
                 StepmaniaSongFile ssf = new StepmaniaSongFile(file);
-                ssf.PrintSong();
+                Console.WriteLine(ssf.TitleWasModified(ssf.AddInformativeTitle()));
             }
+            Console.WriteLine("Done.");
         }
     }
 }

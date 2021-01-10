@@ -7,7 +7,7 @@ namespace StepManiaSongRenamer
     {
         static void Main(string[] args)
         {
-            StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs");
+            StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs\StepMania 5");
         }
     }
 }
