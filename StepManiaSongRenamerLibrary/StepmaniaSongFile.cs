@@ -15,6 +15,13 @@ namespace StepManiaSongRenamerLibrary
         Challenge
     }
 
+    enum TitleStatus
+    {
+        Nothing,
+        Modified,
+        AlreadyProcessed
+    }
+
     class StepmaniaSongFile : TextFile
     {
         private static Level lvl = Level.Challenge;
@@ -49,7 +56,7 @@ namespace StepManiaSongRenamerLibrary
                     string[] BPMsLineSplit = BPMsLine.Split(':', BPMsLine.Length - 7);
                     string[] BPMsShifts = BPMsLineSplit[1].Split(',');
                     string[] BPMsInitial = BPMsShifts[0].Split('=');
-                    return double.Parse(BPMsInitial[1].Remove(BPMsInitial.Length - 1), new CultureInfo("en-US"));
+                    return double.Parse(BPMsInitial[1].Remove(BPMsInitial[1].Length - 1), new CultureInfo("en-US"));
                 }
             }
         }
@@ -69,32 +76,55 @@ namespace StepManiaSongRenamerLibrary
 
         }
 
-        public bool AddInformativeTitle()
+        public bool AlreadyProcessed(string titleRow)
         {
-            bool titleModified = false;
+            if (titleRow[7..].StartsWith($"[{ Difficulty }] [{ BPM }]"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public TitleStatus AddInformativeTitle()
+        {
+            TitleStatus state = TitleStatus.Nothing;
 
             for (int i = 0; i < Content.Length; i++)
             {
                 if (Content[i].StartsWith("#TITLE:"))
                 {
-                    Content[i] = Content[i].Replace(Content[i], $"#TITLE:[{ Difficulty }] [{ BPM }] { Title };");
-                    File.WriteAllLines(Path, Content);
-                    titleModified = true;
-                    break;
+                    if (!AlreadyProcessed(Content[i]))
+                    {
+                        Content[i] = Content[i].Replace(Content[i], $"#TITLE:[{ Difficulty }] [{ BPM }] { Title };");
+                        File.WriteAllLines(Path, Content);
+                        state = TitleStatus.Modified;
+                        break;
+                    }
+                    else
+                    {
+                        state = TitleStatus.AlreadyProcessed;
+                    }
                 }
             }
-            return titleModified;
+            return state;
         }
 
-        public string TitleWasModified(bool yes)
+        public string TitleWasModified(TitleStatus state)
         {
-            if (yes)
+            if (state == TitleStatus.Nothing)
+            {
+                return "Failed to add informative title.";
+            }
+            else if (state == TitleStatus.Modified)
             {
                 return Title;
             }
             else
             {
-                return "Failed to add informative title.";
+                return "This title has already been modified once.";
             }
         }
     }
