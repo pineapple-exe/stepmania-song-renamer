@@ -12,6 +12,12 @@ namespace StepManiaSongRenamerLibrary
         {
             string[] smFilesPaths = Directory.GetFiles(path, "*.sm", SearchOption.AllDirectories);
 
+            if (smFilesPaths.Length == 0)
+            {
+                Console.WriteLine("No sm-files found.");
+                return;
+            }
+
             IEnumerable<Task> tasks = smFilesPaths.Select(async file =>
             {
                 StepmaniaSongFile ssf = new StepmaniaSongFile(file);
