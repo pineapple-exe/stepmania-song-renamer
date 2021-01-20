@@ -1,4 +1,6 @@
 ﻿using StepManiaSongRenamerLibrary;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace StepManiaSongRenamer
@@ -7,7 +9,21 @@ namespace StepManiaSongRenamer
     {
         static async Task Main(string[] args)
         {
-            await StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs\Mandodo's Winter Love Pack\");
+            bool noFolder = true;
+
+            foreach(string path in args)
+            {
+                if (Directory.Exists(path))
+                {
+                    await StepmaniaSongEditor.FindSongFolders(path);
+                    noFolder = false;
+                }
+            }
+            if (noFolder)
+            {
+                Console.WriteLine("Takes only folders as input.");
+            }
+            Console.ReadKey();
         }
     }
 }
