@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StepManiaSongRenamerLibrary
 {
@@ -11,7 +12,11 @@ namespace StepManiaSongRenamerLibrary
         public TextFile(string path)
         {
             Path = path;
-            Content = File.ReadAllLines(path).ToArray();
+        }
+
+        public async Task Load()
+        {
+            Content = await File.ReadAllLinesAsync(Path);
         }
     }
 }

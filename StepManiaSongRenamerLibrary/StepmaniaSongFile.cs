@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace StepManiaSongRenamerLibrary
 {
@@ -88,7 +89,7 @@ namespace StepManiaSongRenamerLibrary
             }
         }
 
-        public TitleStatus AddInformativeTitle()
+        public async Task<TitleStatus> AddInformativeTitle()
         {
             TitleStatus state = TitleStatus.Nothing;
 
@@ -99,7 +100,7 @@ namespace StepManiaSongRenamerLibrary
                     if (!AlreadyProcessed(Content[i]))
                     {
                         Content[i] = Content[i].Replace(Content[i], $"#TITLE:[{ Difficulty }] [{ BPM }] { Title };");
-                        File.WriteAllLines(Path, Content);
+                        await File.WriteAllLinesAsync(Path, Content);
                         state = TitleStatus.Modified;
                         break;
                     }

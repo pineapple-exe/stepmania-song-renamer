@@ -1,13 +1,13 @@
-﻿using System;
-using StepManiaSongRenamerLibrary;
+﻿using StepManiaSongRenamerLibrary;
+using System.Threading.Tasks;
 
 namespace StepManiaSongRenamer
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs\StepMania 5");
+            await StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs\StepMania 5");
         }
     }
 }
