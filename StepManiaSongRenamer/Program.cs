@@ -7,7 +7,7 @@ namespace StepManiaSongRenamer
     {
         static async Task Main(string[] args)
         {
-            await StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs\StepMania 5");
+            await StepmaniaSongEditor.FindSongFolders(@"c:\Games\StepMania 5\Songs\Mandodo's Winter Love Pack\");
         }
     }
 }
