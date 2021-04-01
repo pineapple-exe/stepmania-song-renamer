@@ -1,4 +1,4 @@
-#stepmania-song-renamer
+### StepMania Song Renamer
 
 In the groove is my favorite game! I used to play it in the arcades every week before the epidemic came.
 
